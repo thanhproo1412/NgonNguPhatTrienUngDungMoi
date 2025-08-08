@@ -1,22 +1,16 @@
 'use client';
 
-import {
-    Button,
-    Checkbox,
-    Flex,
-    Text,
-    FormControl,
-    FormLabel,
-    Heading,
-    Input,
-    Stack,
-    Image,
-    Alert,
-    AlertIcon,
-} from '@chakra-ui/react';
+import { Button, Checkbox, Flex, Text, FormControl, FormLabel, Heading, Input, Stack, Image, Alert, AlertIcon, } from '@chakra-ui/react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // thêm
+import useRedirectIfLoggedIn from '@/hooks/useRedirectIfLoggedIn';
 
 export default function SplitScreen() {
+
+    // Hook để tự động redirect nếu đã đăng nhập
+    useRedirectIfLoggedIn();
+
+    const router = useRouter(); // khởi tạo router
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -28,30 +22,20 @@ export default function SplitScreen() {
         setLoading(true);
 
         try {
-            const response = await fetch('https://673db1960118dbfe860858ae.mockapi.io/api/mychakrauiapp/v1/login', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // body: JSON.stringify({ email, password }), // remove because using mock data, need to use method GET
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
             });
 
-            if (!response.ok) {
-                throw new Error('Invalid email or password');
-            }
-
             const data = await response.json();
-            console.log(data);
-            const userData = data[0]?.data?.user;
 
-            // Simulate storing the token (ensure secure storage in a real app)
-            localStorage.setItem('authToken', data[0]?.data?.token);
-            // Check if user data is available before accessing firstName and lastName
-            if (userData) {
-                alert(`Welcome, ${userData.firstName} ${userData.lastName}!`);
-            } else {
-                console.error("User data not found.");
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Invalid email or password');
             }
+
+            localStorage.setItem('authToken', data.token);
+            router.push('/homepage');
 
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -62,8 +46,6 @@ export default function SplitScreen() {
         } finally {
             setLoading(false);
         }
-
-
     };
 
     return (
