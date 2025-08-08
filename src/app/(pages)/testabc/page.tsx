@@ -31,6 +31,7 @@ export default function QuanLyVatTuPage() {
         { id: 1, name: "Xi măng", quantity: 100 },
         { id: 2, name: "Thép", quantity: 50 },
         { id: 3, name: "Sản phẩm mặc định", quantity: 50 },
+        { id: 4, name: "Sản phẩm mặc định 2", quantity: 50 },
     ]);
     const [newMaterial, setNewMaterial] = useState<string>("");
     const [editId, setEditId] = useState<number | null>(null);
