@@ -1,0 +1,53 @@
+/* General calendar styling */
+.fc {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.fc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.fc-toolbar h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.fc-button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fc-button:hover {
+  background-color: #1558b3;
+}
+
+.fc-button-primary {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.fc-daygrid-event {
+  background-color: #1a73e8;
+  color: white;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+/* Event hover effect */
+.fc-event:hover {
+  opacity: 0.8;
+}
+
+/* Current day highlight */
+.fc-day-today {
+  background-color: #e8f0fe;
+}
