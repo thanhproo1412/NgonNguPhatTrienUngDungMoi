@@ -373,11 +373,16 @@ const NAV_ITEMS: Array<NavItem> = [
         ],
     },
     {
-        label: 'Calendar',
-        href: '/calendar',
+        label: 'Quản lý vật tư',
+        href: '/quanlyvattu',
     },
     {
         label: 'Dashboard',
         href: '/dashboard',
     },
+    {
+        label: 'test',
+        href: '/testabc',
+    }
+
 ]
