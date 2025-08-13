@@ -1,0 +1,13 @@
+/* quanLiTonKho.module.css */
+.customHeading {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #ffe4e1;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.tableRowHighlight {
+  background-color: #f0f8ff;
+}
