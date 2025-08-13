@@ -243,7 +243,7 @@ const NAV_ITEMS: Array<NavItem> = [
     },
     { label: 'Quản lý vật tư', href: '/quanlyvattu' },
     { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Quản lí tồn kho', href: '/quanLiTonKho' },
+    { label: 'Quản lí tồn kho', href: '/quanLyTonKho' },
 ];
 
 interface UserData {

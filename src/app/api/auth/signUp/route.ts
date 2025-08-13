@@ -1,5 +1,7 @@
 // src/app/api/signup/route.ts
 import { NextResponse } from 'next/server';
+import { getConnection } from '@/lib/db';
+import bcrypt from 'bcrypt';
 
 export async function POST(req: Request) {
   try {
@@ -9,21 +11,32 @@ export async function POST(req: Request) {
       return NextResponse.json({ status: 'error', message: 'Missing required fields' }, { status: 400 });
     }
 
-    // Ví dụ hardcode: nếu email đã tồn tại thì báo lỗi
-    if (email === 'test@example.com') {
+    const pool = await getConnection();
+
+    // Kiểm tra email đã tồn tại chưa
+    const checkUser = await pool
+      .request()
+      .input('email', email)
+      .query('SELECT * FROM Users WHERE email = @email');
+
+    if (checkUser.recordset.length > 0) {
       return NextResponse.json({ status: 'error', message: 'Email already exists' }, { status: 400 });
     }
 
-    // Giả lập tạo user thành công
-    const fakeUser = {
-      id: Date.now(),
-      name,
-      email,
-      token: 'fake-jwt-token-' + Date.now(),
-    };
+    // Mã hóa mật khẩu
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    return NextResponse.json({ status: 'success', data: fakeUser }, { status: 201 });
+    // Thêm user mới
+    await pool
+      .request()
+      .input('name', name)
+      .input('email', email)
+      .input('password', hashedPassword)
+      .query('INSERT INTO Users (name, email, password) VALUES (@name, @email, @password)');
+
+    return NextResponse.json({ status: 'success', message: 'User created successfully' }, { status: 201 });
   } catch (error) {
+    console.error(error);
     return NextResponse.json({ status: 'error', message: 'Something went wrong' }, { status: 500 });
   }
 }
