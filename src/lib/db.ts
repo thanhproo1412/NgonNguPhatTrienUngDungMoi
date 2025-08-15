@@ -1,45 +1,30 @@
-import sql, { ConnectionPool, config as SQLConfig } from 'mssql';
+import sql from "mssql";
 
-const config: SQLConfig = {
-  server: process.env.DB_SERVER || '',
-  database: process.env.DB_DATABASE || '',
+// Cấu hình kết nối SQL Server
+const config: sql.config = {
+  user: process.env.DB_USER || "nextjs",
+  password: process.env.DB_PASSWORD || "123456",
+  server: process.env.DB_SERVER || "localhost",
+  database: process.env.DB_DATABASE || "QLVT",
   options: {
-    encrypt: process.env.DB_ENCRYPT === 'true',
-    trustServerCertificate: true,
+    encrypt: false, // Đặt true nếu dùng Azure
+    trustServerCertificate: true, // Bỏ qua SSL cho local
   },
-  authentication: {
-    type: 'ntlm',
-    options: {
-      domain: process.env.DB_DOMAIN || '',
-      userName: process.env.DB_USER || '',
-      password: process.env.DB_PASSWORD || '',
-    },
-  },
+  port: parseInt(process.env.DB_PORT || "1433"),
 };
 
-let pool: ConnectionPool | null = null;
+// Dùng connection pool để tránh lỗi "too many connections"
+let pool: sql.ConnectionPool | null = null;
 
-export async function getConnection(): Promise<ConnectionPool> {
-  if (!pool) {
-    try {
+export async function getConnection() {
+  try {
+    if (!pool) {
       pool = await sql.connect(config);
-      console.log('✅ Connected to MSSQL');
-    } catch (err) {
-      console.error('❌ Database connection failed:', err);
-      throw err;
+      console.log("✅ SQL Server connected");
     }
-  }
-  return pool;
-}
-export async function closeConnection(): Promise<void> {
-  if (pool) {
-    try {
-      await pool.close();
-      console.log('✅ Connection closed');
-    } catch (err) {
-      console.error('❌ Error closing connection:', err);
-    } finally {
-      pool = null;
-    }
+    return pool;
+  } catch (err) {
+    console.error("❌ Database connection failed:", err);
+    throw err;
   }
 }
