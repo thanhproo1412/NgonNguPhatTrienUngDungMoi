@@ -16,9 +16,10 @@ const avatars = [
     { name: 'Christian Nwamba', url: 'https://bit.ly/code-beast' },
 ];
 
-export default function LoginPage() {
-    useRedirectIfLoggedIn(); // tự động redirect nếu đã login
+export default function SignupPage() {
+    useRedirectIfLoggedIn(); // redirect nếu đã login
 
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -27,42 +28,37 @@ export default function LoginPage() {
     const [countdown, setCountdown] = useState(3);
     const router = useRouter();
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setSuccess('');
         setLoading(true);
 
         try {
-            const res = await fetch('/api/auth/logIn', {
+            const res = await fetch('/api/auth/signUp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-                credentials: 'include', // nếu API set cookie
+                body: JSON.stringify({ name, email, password }),
+                credentials: 'include', // API set cookie
             });
 
-            let data: any;
-            try {
-                data = await res.json();
-            } catch {
-                throw new Error('Server returned empty response');
-            }
+            const data = await res.json();
 
             if (!res.ok || !data.success) {
-                throw new Error(data.message || 'Login failed');
+                throw new Error(data.message || 'Sign up failed');
             }
 
             let seconds = 3;
             setCountdown(seconds);
-            setSuccess(`Login thành công! Chuyển hướng sau ${seconds}s...`);
+            setSuccess(`Signup thành công! Chuyển hướng sau ${seconds}s...`);
 
             const timer = setInterval(() => {
                 seconds -= 1;
                 setCountdown(seconds);
-                setSuccess(`Login thành công! Chuyển hướng sau ${seconds}s...`);
+                setSuccess(`Signup thành công! Chuyển hướng sau ${seconds}s...`);
                 if (seconds <= 0) {
                     clearInterval(timer);
-                    router.push('/'); // redirect về trang chủ
+                    router.push('/logIn'); // redirect sang login
                 }
             }, 1000);
 
@@ -78,8 +74,8 @@ export default function LoginPage() {
             <Container as={SimpleGrid} maxW={'7xl'} columns={{ base: 1, md: 2 }} spacing={{ base: 10, lg: 32 }} py={{ base: 10, sm: 20, lg: 32 }}>
                 <Stack spacing={{ base: 10, md: 20 }}>
                     <Heading lineHeight={1.1} fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
-                        Welcome Back{' '}
-                        <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">👋</Text>
+                        Join Us{' '}
+                        <Text as={'span'} bgGradient="linear(to-r, red.400,pink.400)" bgClip="text">🎉</Text>
                     </Heading>
                     <AvatarGroup>
                         {avatars.map((avatar) => (
@@ -93,14 +89,15 @@ export default function LoginPage() {
                     {error && <Alert status="error" borderRadius="md"><AlertIcon />{error}</Alert>}
                     {success && <Alert status="success" borderRadius="md"><AlertIcon />{success}</Alert>}
 
-                    <Box as={'form'} onSubmit={handleLogin} mt={4}>
+                    <Box as={'form'} onSubmit={handleSignup} mt={4}>
                         <Stack spacing={4}>
+                            <Input placeholder="Name" type="text" bg={'gray.100'} value={name} onChange={(e) => setName(e.target.value)} />
                             <Input placeholder="Email" type="email" bg={'gray.100'} value={email} onChange={(e) => setEmail(e.target.value)} />
                             <Input placeholder="Password" type="password" bg={'gray.100'} value={password} onChange={(e) => setPassword(e.target.value)} />
                         </Stack>
                         <Button mt={6} w={'full'} isLoading={loading} type="submit"
                             bgGradient="linear(to-r, red.400,pink.400)" color={'white'}>
-                            Log In
+                            Sign Up
                         </Button>
                     </Box>
                 </Stack>
