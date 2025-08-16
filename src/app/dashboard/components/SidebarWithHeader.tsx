@@ -254,58 +254,37 @@ const NAV_ITEMS: Array<NavItem> = [
         icon: FiHome
     },
     {
-        label: 'chart',
-        href: '/dashboard/chart',
-        subLabel: 'chart',
+        label: 'Báo cáo tài chính',
+        href: '/dashboard/bao-cao',
+        subLabel: 'Báo cáo tài chính',
         icon: FiHome
     },
     {
         label: 'AdminPage',
         href: '/dashboard/adminpage',
-        children: [
-            {
-                label: 'Tin Vinfast',
-                subLabel: 'test subLabel',
-                href: '/tintuc',
-                icon: FiHome
-            },
-            {
-                label: 'Tin Cộng Đồng',
-                href: '#',
-                icon: FiTrendingUp
-            },
-            {
-                label: 'Đời Sống',
-                icon: FiCompass, // Default icon if no specific icon is provided
-                children: [
-                    {
-                        label: 'Thị trường xe điện',
-                        href: '/doisong/thitruongxedien',
-                        icon: FiSettings
-                    },
-                    {
-                        label: 'Công nghệ',
-                        href: '/doisong/congnghe',
-                        icon: FiStar
-                    },
-                    {
-                        label: 'Du lịch',
-                        href: '/doisong/dulich',
-                        icon: FiStar
-                    },
-                    {
-                        label: 'Ảnh đẹp',
-                        icon: FiStar,
-                        children: [
-                            {
-                                label: 'Ảnh đẹp',
-                                href: '/doisong/anhdep',
-                                icon: FiStar
-                            }
-                        ],
-                    },
-                ],
-            },
-        ],
+    },
+    {
+        label: 'Quản lí nhân viên',
+        href: '/dashboard/nhan-vien',
+        subLabel: 'Nhân Viên',
+        icon: FiHome
+    },
+    {
+        label: 'Quản lí nhân phòng ban',
+        href: '/dashboard/phong-ban',
+        subLabel: 'Phòng ban',
+        icon: FiHome
+    },
+    {
+        label: 'Nhà cung cấp',
+        href: '/dashboard/nha-cung-cap',
+        subLabel: 'Nhà cung cấp',
+        icon: FiHome
+    },
+    {
+        label: 'Quản lí hàng hóa',
+        href: '/dashboard/quan-li-hang-hoa',
+        subLabel: 'Quản lí hàng hóa',
+        icon: FiHome
     },
 ];
