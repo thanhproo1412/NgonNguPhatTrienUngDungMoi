@@ -116,6 +116,11 @@ export default function WithSubnavigation() {
                                         bg={useColorModeValue('white', 'gray.900')}
                                         borderColor={useColorModeValue('gray.200', 'gray.700')}
                                     >
+                                        {user.role === 'admin' && (
+                                            <MenuItem as="a" href="/dashboard">
+                                                Dashboard
+                                            </MenuItem>
+                                        )}
                                         <MenuItem>Profile</MenuItem>
                                         <MenuItem>Settings</MenuItem>
                                         <MenuItem>Billing</MenuItem>
@@ -218,32 +223,36 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
 const NAV_ITEMS: Array<NavItem> = [
     { label: 'Trang Chủ', href: '/homepage' },
     {
-        label: 'Shop', href: '/shop', children: [
-            { label: 'Geshin Impact', href: '/shop' },
-            { label: 'League of Legend', href: '#' },
-            {
-                label: 'Đời Sống', children: [
-                    { label: 'Thị trường xe điện', href: '/doisong/thitruongxedien' },
-                    { label: 'Công nghệ', href: '/doisong/congnghe' },
-                    { label: 'Du lịch', href: '/doisong/dulich' },
-                    {
-                        label: 'Ảnh đẹp', children: [
-                            { label: 'Ảnh đẹp', href: '/doisong/anhdep' }
-                        ]
-                    }
-                ]
-            }
+        label: 'Vật tư',
+        href: '/vat-tu',
+        children: [
+            { label: 'Danh sách hàng hóa', href: '/vat-tu/danh-sach' },
+            { label: 'Loại hàng', href: '/vat-tu/loai-hang' },
+            { label: 'Đơn vị tính', href: '/vat-tu/don-vi-tinh' }
         ]
     },
     {
-        label: 'Diễn đàn', href: '/diendan', children: [
-            { label: 'Post', href: '/diendan/post' },
-            { label: 'Tin tức', href: '#' }
+        label: 'Đơn hàng',
+        href: '/don-hang',
+        children: [
+            { label: 'Phiếu xuất', href: '/don-hang/xuat' },
+            { label: 'Chi tiết xuất', href: '/don-hang/chi-tiet' },
+            { label: 'Tạo phiếu xuất mới', href: '/don-hang/tao' }
         ]
     },
-    { label: 'Quản lý vật tư', href: '/quanlyvattu' },
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Quản lí tồn kho', href: '/quanLyTonKho' },
+    {
+        label: 'Báo cáo',
+        href: '/bao-cao',
+        children: [
+            { label: 'Tồn kho', href: '/bao-cao/ton-kho' },
+            { label: 'Nhập hàng', href: '/bao-cao/nhap-hang' },
+            { label: 'Xuất hàng', href: '/bao-cao/xuat-hang' },
+            { label: 'Doanh thu', href: '/bao-cao/doanh-thu' }
+        ]
+    }
+
+    // { label: 'Dashboard', href: '/dashboard' },
+    // { label: 'Quản lí tồn kho', href: '/quanLyTonKho' },
 ];
 
 interface UserData {

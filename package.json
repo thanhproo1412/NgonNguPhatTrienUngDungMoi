@@ -19,6 +19,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@fullcalendar/timegrid": "^6.1.15",
+    "bcryptjs": "^3.0.2",
     "chart.js": "^4.4.6",
     "framer-motion": "^10.16.9",
     "jsonwebtoken": "^9.0.2",

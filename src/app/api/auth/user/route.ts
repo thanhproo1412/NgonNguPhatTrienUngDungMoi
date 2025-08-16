@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     return NextResponse.json({
       name: decoded.name,
       role: decoded.role,
-      avatar: decoded.avatar || 'https://via.placeholder.com/150'
+      avatar: decoded.avatar || 'https://i.pinimg.com/originals/dc/9d/bc/dc9dbc07f3b08aea6381cd5e8eb0dd5b.png'
     })
   } catch (error) {
     return NextResponse.json(
