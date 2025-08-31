@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import {
   Stack, Flex, Heading, Button, Table, Thead, Tbody, Tr, Th, Td,
   Select, Input, useToast, Spinner, Box, HStack, Modal, ModalOverlay,
@@ -48,22 +49,20 @@ export default function ProductPage() {
 
   const toast = useToast();
 
-  // ----------------- API Calls -----------------
-  async function fetchProducts() {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/hanghoa');
       const data = await res.json();
       setProducts(data);
     } catch (err) {
-      console.error(err);
       toast({ title: "Lỗi tải hàng hóa", status: "error" });
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
 
-  async function fetchCategories() {
+  const fetchCategories = useCallback(async () => {
     try {
       const res = await fetch('/api/loaihang');
       const data = await res.json();
@@ -71,16 +70,15 @@ export default function ProductPage() {
     } catch (err) {
       console.error(err);
     }
-  }
+  }, []);
 
-  async function saveProduct() {
+  const saveProduct = useCallback(async () => {
     try {
       if (!form.mahang || !form.tenhang) throw new Error("Mã và tên hàng hóa là bắt buộc");
       if (!form.malh && !(isNewCategoryChecked && newCategoryName.trim())) {
         toast({ title: "Vui lòng chọn loại hàng hoặc nhập loại hàng mới", status: "error" });
         return;
       }
-      // Thêm loại hàng mới nếu chọn
       if (isNewCategoryChecked && newCategoryName.trim()) {
         const resCat = await fetch('/api/loaihang', {
           method: 'POST',
@@ -107,14 +105,9 @@ export default function ProductPage() {
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, status: 'error' });
     }
-  }
+  }, [form, isEditing, isNewCategoryChecked, newCategoryName, toast, fetchProducts, fetchCategories]);
 
-  function confirmDeleteProduct(product: Product) {
-    setCurrentProduct(product);
-    setDeleteModalOpen(true);
-  }
-
-  async function handleDeleteProduct() {
+  const handleDeleteProduct = useCallback(async () => {
     if (!currentProduct?.id) return;
     try {
       const res = await fetch(`/api/hanghoa?id=${currentProduct.id}`, { method: 'DELETE' });
@@ -125,16 +118,9 @@ export default function ProductPage() {
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, status: 'error' });
     }
-  }
+  }, [currentProduct, toast, fetchProducts]);
 
-  function openInventoryModal(product: Product, type: 'IN' | 'OUT') {
-    setCurrentProduct(product);
-    setInventoryType(type);
-    setInventoryQty(0);
-    setInventoryModalOpen(true);
-  }
-
-  async function handleInventorySubmit() {
+  const handleInventorySubmit = useCallback(async () => {
     if (!currentProduct || inventoryQty <= 0) {
       toast({ title: "Số lượng không hợp lệ", status: "error" });
       return;
@@ -158,18 +144,16 @@ export default function ProductPage() {
     } catch (err: any) {
       toast({ title: 'Lỗi', description: err.message, status: 'error' });
     }
-  }
+  }, [currentProduct, inventoryQty, inventoryType, toast, fetchProducts]);
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, []);
+  }, [fetchProducts, fetchCategories]);
 
-  // ----------------- Pagination -----------------
   const totalPages = Math.ceil(products.length / pageSize);
   const paginatedProducts = products.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
-  // ----------------- Render -----------------
   return (
     <Stack spacing={5}>
       <Flex justify="space-between" align="center">
@@ -205,10 +189,12 @@ export default function ProductPage() {
               <Tr key={p.id} bg={idx % 2 === 0 ? "gray.50" : "white"}>
                 <Td>
                   {p.imageURL ? (
-                    <img
+                    <Image
                       src={p.imageURL}
                       alt={p.tenhang}
-                      style={{ width: 50, height: 50, objectFit: "cover", cursor: "pointer" }}
+                      width={50}
+                      height={50}
+                      style={{ objectFit: "cover", cursor: "pointer" }}
                       onClick={() => { setCurrentImage(p.imageURL!); setImageModalOpen(true); }}
                     />
                   ) : "Chưa có"}
@@ -222,14 +208,14 @@ export default function ProductPage() {
                 <Td>{p.ghichu}</Td>
                 <Td>
                   <Flex gap={2} align="center">
-                    <Button size="sm" colorScheme="green" onClick={() => openInventoryModal(p, 'IN')}>+</Button>
-                    <Button size="sm" colorScheme="red" onClick={() => openInventoryModal(p, 'OUT')}>-</Button>
+                    <Button size="sm" colorScheme="green" onClick={() => { setCurrentProduct(p); setInventoryType('IN'); setInventoryQty(0); setInventoryModalOpen(true); }}>+</Button>
+                    <Button size="sm" colorScheme="red" onClick={() => { setCurrentProduct(p); setInventoryType('OUT'); setInventoryQty(0); setInventoryModalOpen(true); }}>-</Button>
                     <Box ml={2}>Số tồn: {p.tonkho || 0}</Box>
                   </Flex>
                 </Td>
                 <Td>
                   <Button size="sm" onClick={() => { setForm(p); setIsEditing(true); setModalOpen(true) }}>Sửa</Button>
-                  <Button size="sm" colorScheme="red" onClick={() => confirmDeleteProduct(p)}>Xóa</Button>
+                  <Button size="sm" colorScheme="red" onClick={() => { setCurrentProduct(p); setDeleteModalOpen(true); }}>Xóa</Button>
                 </Td>
               </Tr>
             ))}
@@ -284,43 +270,18 @@ export default function ProductPage() {
               <FormControl><FormLabel>Giá</FormLabel><Input type="number" name="price" value={form.price || 0} onChange={e => setForm({ ...form, price: Number(e.target.value) })} /></FormControl>
               <FormControl><FormLabel>Ghi chú</FormLabel><Input name="ghichu" value={form.ghichu || ''} onChange={e => setForm({ ...form, ghichu: e.target.value })} /></FormControl>
               <FormControl>
-                <FormLabel>
-                  Loại hàng <Text as="span" color="red">*</Text>
-                </FormLabel>
-                <Select
-                  name="malh"
-                  value={form.malh || ''}
-                  onChange={e => setForm({ ...form, malh: e.target.value })}
-                  disabled={isNewCategoryChecked}
-                  placeholder="-- Chọn --"
-                >
+                <FormLabel>Loại hàng <Text as="span" color="red">*</Text></FormLabel>
+                <Select name="malh" value={form.malh || ''} onChange={e => setForm({ ...form, malh: e.target.value })} disabled={isNewCategoryChecked} placeholder="-- Chọn --">
                   {categories.map(c => <option key={c.malh} value={c.malh}>{c.tenlh}</option>)}
                 </Select>
-                <Checkbox
-                  mt={2}
-                  isChecked={isNewCategoryChecked}
-                  onChange={e => setIsNewCategoryChecked(e.target.checked)}
-                >
-                  Loại hàng mới
-                </Checkbox>
-
+                <Checkbox mt={2} isChecked={isNewCategoryChecked} onChange={e => setIsNewCategoryChecked(e.target.checked)}>Loại hàng mới</Checkbox>
                 {isNewCategoryChecked && (
-                  <Input
-                    mt={2}
-                    placeholder="Tên loại hàng mới"
-                    value={newCategoryName}
-                    onChange={e => setNewCategoryName(e.target.value)}
-                  />
+                  <Input mt={2} placeholder="Tên loại hàng mới" value={newCategoryName} onChange={e => setNewCategoryName(e.target.value)} />
                 )}
               </FormControl>
               <FormControl>
                 <FormLabel>URL ảnh</FormLabel>
-                <Input
-                  name="imageURL"
-                  placeholder="Nhập URL ảnh"
-                  value={form.imageURL || ''}
-                  onChange={e => setForm({ ...form, imageURL: e.target.value })}
-                />
+                <Input name="imageURL" placeholder="Nhập URL ảnh" value={form.imageURL || ''} onChange={e => setForm({ ...form, imageURL: e.target.value })} />
               </FormControl>
             </SimpleGrid>
           </ModalBody>
@@ -331,12 +292,12 @@ export default function ProductPage() {
         </ModalContent>
       </Modal>
 
-      // Modal hiển thị ảnh lớn
+      {/* Image Preview Modal */}
       <Modal isOpen={imageModalOpen} onClose={() => setImageModalOpen(false)} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent bg="transparent" boxShadow="none">
           <ModalBody p={0}>
-            <img src={currentImage} alt="Ảnh sản phẩm" style={{ width: "100%", borderRadius: 8 }} />
+            <Image src={currentImage} alt="Ảnh sản phẩm" width={600} height={600} style={{ borderRadius: 8, width: "100%", height: "auto" }} />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -350,14 +311,12 @@ export default function ProductPage() {
         )}
       </HStack>
     </Stack>
-  )
+  );
 }
 
-// ----------------- Pagination logic -----------------
 function getPageNumbers(current: number, total: number) {
   const delta = 2;
   const pages: (number | string)[] = [];
-
   if (total <= 7) {
     for (let i = 1; i <= total; i++) pages.push(i);
   } else {
@@ -369,6 +328,5 @@ function getPageNumbers(current: number, total: number) {
     if (typeof pages[pages.length - 2] === "number" && (pages[pages.length - 2] as number) < total - 1) pages.splice(pages.length - 1, 0, "...");
     pages.push(total);
   }
-
   return pages;
 }

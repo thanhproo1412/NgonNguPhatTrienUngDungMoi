@@ -17,6 +17,7 @@ const avatars = [
 ];
 
 export default function SignupPage() {
+    const size = useBreakpointValue({ base: "sm", md: "md" }); // ✅ gọi hook ở top-level
     useRedirectIfLoggedIn(); // redirect nếu đã login
 
     const [name, setName] = useState('');
@@ -80,7 +81,7 @@ export default function SignupPage() {
                     <AvatarGroup>
                         {avatars.map((avatar) => (
                             <Avatar key={avatar.name} name={avatar.name} src={avatar.url}
-                                size={useBreakpointValue({ base: 'md', md: 'lg' })} />
+                                size={size} />
                         ))}
                     </AvatarGroup>
                 </Stack>

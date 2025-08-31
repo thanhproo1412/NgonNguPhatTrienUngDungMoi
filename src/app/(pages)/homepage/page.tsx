@@ -14,61 +14,35 @@ import {
     useColorModeValue,
     Container,
     VStack,
+    Button,
 } from '@chakra-ui/react'
-
-interface IBlogTags {
-    tags: Array<string>
-    marginTop?: SpaceProps['marginTop']
-}
 
 interface Props {
     marginTop?: number
-    tags: any[]
+    tags: string[]
 }
 
-const BlogTags = (props: Props) => {
-    const { marginTop = 0, tags } = props
-
-    return (
-        <HStack spacing={2} marginTop={marginTop}>
-            {tags.map((tag) => {
-                return (
-                    <Tag size={'md'} variant="solid" colorScheme="orange" key={tag}>
-                        {tag}
-                    </Tag>
-                )
-            })}
-        </HStack>
-    )
-}
-
-interface BlogAuthorProps {
-    date: Date
-    name: string
-}
-
-const BlogAuthor = (props: BlogAuthorProps) => {
-    return (
-        <HStack marginTop="2" spacing="2" display="flex" alignItems="center">
-            <Image
-                borderRadius="full"
-                boxSize="40px"
-                src="https://100k-faces.glitch.me/random-image"
-                alt={`Avatar of ${props.name}`}
-            />
-            <Text fontWeight="medium">{props.name}</Text>
-            <Text>—</Text>
-            <Text>{props.date.toLocaleDateString()}</Text>
-        </HStack>
-    )
-}
+const ItemTags = ({ marginTop = 0, tags }: Props) => (
+    <HStack spacing={2} marginTop={marginTop}>
+        {tags.map((tag) => (
+            <Tag size={'md'} variant="solid" colorScheme="green" key={tag}>
+                {tag}
+            </Tag>
+        ))}
+    </HStack>
+)
 
 const HomePage = () => {
     return (
         <Container maxW={'7xl'} p="12">
-            <Heading as="h1">Stories by Chakra Templates</Heading>
+            {/* Tiêu đề trang */}
+            <Heading as="h1" textAlign="center" color="green.600">
+                Quản lý vật tư thông minh
+            </Heading>
+
+            {/* Phần giới thiệu */}
             <Box
-                marginTop={{ base: '1', sm: '5' }}
+                marginTop={{ base: '4', sm: '8' }}
                 display="flex"
                 flexDirection={{ base: 'column', sm: 'row' }}
                 justifyContent="space-between">
@@ -83,22 +57,18 @@ const HomePage = () => {
                         zIndex="2"
                         marginLeft={{ base: '0', sm: '5%' }}
                         marginTop="5%">
-                        <Box textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                            <Image
-                                borderRadius="lg"
-                                src={
-                                    'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                                }
-                                alt="some good alt text"
-                                objectFit="contain"
-                            />
-                        </Box>
+                        <Image
+                            borderRadius="lg"
+                            src="https://images.unsplash.com/photo-1581091215367-59ab6cfc63c2?auto=format&fit=crop&w=800&q=80"
+                            alt="Quản lý vật tư"
+                            objectFit="cover"
+                        />
                     </Box>
                     <Box zIndex="1" width="100%" position="absolute" height="100%">
                         <Box
                             bgGradient={useColorModeValue(
-                                'radial(orange.600 1px, transparent 1px)',
-                                'radial(orange.300 1px, transparent 1px)',
+                                'radial(green.600 1px, transparent 1px)',
+                                'radial(green.300 1px, transparent 1px)',
                             )}
                             backgroundSize="20px 20px"
                             opacity="0.4"
@@ -106,93 +76,75 @@ const HomePage = () => {
                         />
                     </Box>
                 </Box>
+
                 <Box
                     display="flex"
                     flex="1"
                     flexDirection="column"
                     justifyContent="center"
                     marginTop={{ base: '3', sm: '0' }}>
-                    <BlogTags tags={['Engineering', 'Product']} />
-                    <Heading marginTop="1">
+                    <ItemTags tags={['Kho vật tư', 'Theo dõi', 'Tối ưu']} />
+                    <Heading marginTop="1" fontSize="2xl">
                         <Text textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                            Blog article title
+                            Quản lý nhập – xuất vật tư hiệu quả
                         </Text>
                     </Heading>
                     <Text
                         as="p"
-                        marginTop="2"
+                        marginTop="3"
                         color={useColorModeValue('gray.700', 'gray.200')}
                         fontSize="lg">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry&apos;s standard dummy text ever since the
-                        1500s, when an unknown printer took a galley of type and scrambled it to make
-                        a type specimen book.
+                        Hệ thống hỗ trợ bạn theo dõi tồn kho, nhập xuất và cập nhật dữ liệu vật tư nhanh chóng.
+                        Tiết kiệm thời gian, giảm sai sót, tối ưu quy trình quản lý kho của bạn.
                     </Text>
-                    <BlogAuthor name="John Doe" date={new Date('2021-04-06T19:01:27Z')} />
+                    <Button
+                        colorScheme="green"
+                        alignSelf="flex-start"
+                        mt={4}
+                        onClick={() => window.location.href = "/vat-tu"}>
+                        Xem danh sách vật tư
+                    </Button>
                 </Box>
             </Box>
-            <Heading as="h2" marginTop="5">
-                Latest articles
+
+            {/* Danh sách vật tư mới */}
+            <Heading as="h2" marginTop="10" color="green.700">
+                Vật tư mới cập nhật
             </Heading>
-            <Divider marginTop="5" />
+            <Divider marginTop="3" />
             <Wrap spacing="30px" marginTop="5">
-                <WrapItem width={{ base: '100%', sm: '45%', md: '45%', lg: '30%' }}>
-                    <Box w="100%">
-                        <Box borderRadius="lg" overflow="hidden">
-                            <Box textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                                <Image
-                                    transform="scale(1.0)"
-                                    src={
-                                        'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=800&q=80'
-                                    }
-                                    alt="some text"
-                                    objectFit="contain"
-                                    width="100%"
-                                    transition="0.3s ease-in-out"
-                                    _hover={{
-                                        transform: 'scale(1.05)',
-                                    }}
-                                />
-                            </Box>
+                {[
+                    { name: "Xi măng PCB40", img: "https://images.unsplash.com/photo-1625745426820-028e8d76f4c8?auto=format&fit=crop&w=600&q=80", tags: ["Xây dựng", "Tồn kho: 120 bao"] },
+                    { name: "Thép cuộn D10", img: "https://images.unsplash.com/photo-1521207418485-99c705420785?auto=format&fit=crop&w=600&q=80", tags: ["Kết cấu", "Tồn kho: 85 cuộn"] },
+                    { name: "Sơn chống thấm", img: "https://images.unsplash.com/photo-1606836591695-4b33dbf1d5e4?auto=format&fit=crop&w=600&q=80", tags: ["Hoàn thiện", "Tồn kho: 40 thùng"] },
+                ].map((item, index) => (
+                    <WrapItem key={index} width={{ base: '100%', sm: '45%', md: '30%' }}>
+                        <Box w="100%" borderWidth="1px" borderRadius="lg" overflow="hidden" p={4}>
+                            <Image
+                                borderRadius="lg"
+                                src={item.img}
+                                alt={item.name}
+                                objectFit="cover"
+                                width="100%"
+                                height="200px"
+                            />
+                            <ItemTags tags={item.tags} marginTop={3} />
+                            <Heading fontSize="xl" marginTop="2">
+                                {item.name}
+                            </Heading>
                         </Box>
-                        <BlogTags tags={['Engineering', 'Product']} marginTop={3} />
-                        <Heading fontSize="xl" marginTop="2">
-                            <Text textDecoration="none" _hover={{ textDecoration: 'none' }}>
-                                Some blog title
-                            </Text>
-                        </Heading>
-                        <Text as="p" fontSize="md" marginTop="2">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                            Lorem Ipsum has been the industry&apos;s standard dummy text ever since the
-                            1500s, when an unknown printer took a galley of type and scrambled it to
-                            make a type specimen book.
-                        </Text>
-                        <BlogAuthor name="John Doe" date={new Date('2021-04-06T19:01:27Z')} />
-                    </Box>
-                </WrapItem>
+                    </WrapItem>
+                ))}
             </Wrap>
+
+            {/* Phần giới thiệu bổ sung */}
             <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
-                <Heading as="h2">What we write about</Heading>
+                <Heading as="h2" color="green.700">Tại sao nên dùng hệ thống?</Heading>
                 <Text as="p" fontSize="lg">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-                    arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-                    Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-                    commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-                    Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
-                </Text>
-                <Text as="p" fontSize="lg">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-                    arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-                    Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-                    commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-                    Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
-                </Text>
-                <Text as="p" fontSize="lg">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec condimentum quam
-                    arcu, eu tempus tortor molestie at. Vestibulum pretium condimentum dignissim.
-                    Vestibulum ultrices vitae nisi sed imperdiet. Mauris quis erat consequat,
-                    commodo massa quis, feugiat sapien. Suspendisse placerat vulputate posuere.
-                    Curabitur neque tortor, mattis nec lacus non, placerat congue elit.
+                    ✔ Quản lý tồn kho chính xác theo thời gian thực  
+                    ✔ Hỗ trợ nhập – xuất nhanh chóng, báo cáo tự động  
+                    ✔ Giảm rủi ro thất thoát vật tư  
+                    ✔ Phù hợp cho doanh nghiệp vừa và nhỏ
                 </Text>
             </VStack>
         </Container>

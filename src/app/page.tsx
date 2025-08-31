@@ -1,22 +1,17 @@
 'use client';
 import Link from 'next/link'
-// import styles from './globals.css'
-import { Button, Box, ChakraProvider, Container, Heading, Icon, Stack, useColorModeValue, createIcon, Text, AspectRatio, Flex, IconButton, IconProps } from '@chakra-ui/react'
-// 1. Import the extendTheme function
-import theme from './theme.tsx'
 import {
-
-} from "@chakra-ui/react";
+  Button, Box, ChakraProvider, Container, Heading, Icon, Stack,
+  useColorModeValue, createIcon, Text, AspectRatio, Flex, IconButton, IconProps
+} from '@chakra-ui/react'
+import theme from './theme.tsx'
 import { useState } from 'react';
 
-
 export default function Home() {
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setIsLoading(true);
-    // Your asynchronous operation here...
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -30,11 +25,13 @@ export default function Home() {
           spacing={{ base: 8, md: 10 }}
           py={{ base: 20, md: 28 }}
           direction={{ base: 'column', md: 'row' }}>
-          <Stack flex={1} spacing={{ base: 5, md: 10 }}>
+
+          {/* Phần text giới thiệu */}
+          <Stack flex={1} spacing={{ base: 5, md: 8 }}>
             <Heading
-              lineHeight={1.1}
-              fontWeight={600}
-              fontSize={{ base: '3xl', sm: '4xl', lg: '6xl' }}>
+              lineHeight={1.2}
+              fontWeight={700}
+              fontSize={{ base: '3xl', sm: '4xl', lg: '5xl' }}>
               <Text
                 as={'span'}
                 position={'relative'}
@@ -45,54 +42,56 @@ export default function Home() {
                   position: 'absolute',
                   bottom: 1,
                   left: 0,
-                  bg: 'red.400',
+                  bg: 'blue.300',
                   zIndex: -1,
                 }}>
-                Write once,
+                Quản lý vật tư xây dựng
               </Text>
               <br />
-              <Text as={'span'} color={'red.400'}>
-                use everywhere!
+              <Text as={'span'} color={'blue.500'}>
+                Dễ dàng – Nhanh chóng – Chính xác
               </Text>
             </Heading>
-            <Text color={'gray.500'}>
-              Snippy is a rich coding snippets app that lets you create your own code
-              snippets, categorize them, and even sync them in the cloud so you can use them
-              anywhere. All that is free!
+
+            <Text color={'gray.600'} fontSize={{ base: 'md', md: 'lg' }}>
+              Giải pháp giúp doanh nghiệp xây dựng quản lý vật tư, kho bãi, nhập xuất tồn
+              một cách hiệu quả. Theo dõi chi phí, giảm thất thoát và tăng hiệu suất công việc
+              nhờ hệ thống quản lý thông minh.
             </Text>
-            <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: 'column', sm: 'row' }}>
-              <Button
-                rounded={'full'}
-                size={'lg'}
-                fontWeight={'normal'}
-                px={6}
-                colorScheme={'red'}
-                bg={'red.400'}
-                _hover={{ bg: 'red.500' }}>
 
-                < Link href="homepage" className='p-0 m-0' >
-                  <Button  fontSize={'xl'} isLoading={isLoading} onClick={handleClick}>
-                    Go to Home page
-                  </Button>
-                </Link>
+            <Stack spacing={{ base: 3, sm: 6 }} direction={{ base: 'column', sm: 'row' }}>
+              <Link href="/logIn">
+                <Button
+                  rounded={'full'}
+                  size={'lg'}
+                  fontWeight={'bold'}
+                  px={6}
+                  colorScheme={'blue'}
+                  bg={'blue.400'}
+                  _hover={{ bg: 'blue.500' }}
+                  isLoading={isLoading}
+                  onClick={handleClick}>
+                  Bắt đầu quản lý
+                </Button>
+              </Link>
 
-              </Button>
-              <Button
-                rounded={'full'}
-                size={'lg'}
-                fontWeight={'normal'}
-                px={6}
-                leftIcon={<PlayIcon h={4} w={4} color={'gray.300'} />}>
-                How It Works
-              </Button>
+              <Link href="/homepage">
+                <Button
+                  rounded={'full'}
+                  size={'lg'}
+                  fontWeight={'normal'}
+                  px={6}
+                  variant="outline"
+                  borderColor="blue.300"
+                  _hover={{ bg: 'blue.50' }}>
+                  Trang chủ
+                </Button>
+              </Link>
             </Stack>
           </Stack>
-          <Flex
-            flex={1}
-            justify={'center'}
-            align={'center'}
-            position={'relative'}
-            w={'full'}>
+
+          {/* Phần hình ảnh/video minh họa */}
+          <Flex flex={1} justify={'center'} align={'center'} position={'relative'} w={'full'}>
             <Blob
               w={'150%'}
               h={'150%'}
@@ -100,7 +99,7 @@ export default function Home() {
               top={'-20%'}
               left={0}
               zIndex={-1}
-              color={useColorModeValue('red.50', 'red.400')}
+              color={useColorModeValue('blue.50', 'blue.400')}
             />
             <Box
               position={'relative'}
@@ -122,19 +121,17 @@ export default function Home() {
               />
               <AspectRatio ratio={16 / 9}>
                 <iframe
-                  title='naruto'
-                  src='https://www.youtube.com/embed/QhBnZ6NPOY0'
+                  title='demo-quan-ly-vat-tu'
+                  src='https://www.youtube.com/embed/jkxtXXWqMqo'
                   allowFullScreen
                 />
               </AspectRatio>
             </Box>
-
           </Flex>
         </Stack>
       </Container>
     </ChakraProvider>
   )
-
 }
 
 const PlayIcon = createIcon({

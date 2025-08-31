@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   Box, Button, Table, Thead, Tbody, Tr, Th, Td, Spinner, Center, Flex, Heading, Modal, ModalOverlay, ModalContent,
   ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, FormControl, FormLabel, useToast
@@ -16,13 +16,13 @@ export default function PhongBanPage() {
   const [phongban, setPhongban] = useState<PhongBan[]>([])
   const [form, setForm] = useState<Partial<PhongBan>>({})
   const [editId, setEditId] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(false) // <-- trạng thái loading
+  const [loading, setLoading] = useState<boolean>(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
 
   // Load data
-  const fetchData = async () => {
-    setLoading(true) // Bắt đầu loading
+  const fetchData = useCallback(async () => {
+    setLoading(true)
     try {
       const res = await fetch('/api/phongban')
       const data = await res.json()
@@ -30,42 +30,57 @@ export default function PhongBanPage() {
     } catch (error) {
       toast({ title: 'Lỗi khi tải dữ liệu', status: 'error' })
     } finally {
-      setLoading(false) // Kết thúc loading
+      setLoading(false)
     }
-  }
+  }, [toast])
 
-  useEffect(() => { fetchData() }, [])
+  useEffect(() => {
+    fetchData()
+  }, [fetchData]) // ✅ không còn warning
 
   // Thêm / Cập nhật
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     const method = editId ? 'PUT' : 'POST'
     const url = editId ? `/api/phongban/${editId}` : '/api/phongban'
+
     await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     })
+
     toast({ title: editId ? 'Cập nhật thành công' : 'Thêm thành công', status: 'success' })
     fetchData()
     onClose()
     setForm({})
     setEditId(null)
-  }
+  }, [editId, form, fetchData, onClose, toast])
 
   // Xóa
-  const handleDelete = async (id: string) => {
-    if (!confirm('Xóa phòng ban này?')) return
-    await fetch(`/api/phongban/${id}`, { method: 'DELETE' })
-    toast({ title: 'Xóa thành công', status: 'info' })
-    fetchData()
-  }
+  const handleDelete = useCallback(
+    async (id: string) => {
+      if (!confirm('Xóa phòng ban này?')) return
+      await fetch(`/api/phongban/${id}`, { method: 'DELETE' })
+      toast({ title: 'Xóa thành công', status: 'info' })
+      fetchData()
+    },
+    [fetchData, toast]
+  )
 
   return (
     <Box p={5}>
-
       <Flex justify="space-between" align="center">
         <Heading size="md">Quản lý phòng ban</Heading>
-        <Button colorScheme="blue" onClick={() => { setForm({}); setEditId(null); onOpen() }}>Thêm phòng ban</Button>
+        <Button
+          colorScheme="blue"
+          onClick={() => {
+            setForm({})
+            setEditId(null)
+            onOpen()
+          }}
+        >
+          Thêm phòng ban
+        </Button>
       </Flex>
 
       {/* Hiển thị loading spinner */}
@@ -85,13 +100,25 @@ export default function PhongBanPage() {
           </Thead>
           <Tbody>
             {phongban.map((pb, idx) => (
-              <Tr key={pb.mapb} bg={idx % 2 === 0 ? "gray.50" : "white"}>
+              <Tr key={pb.mapb} bg={idx % 2 === 0 ? 'gray.50' : 'white'}>
                 <Td>{pb.mapb}</Td>
                 <Td>{pb.tenpb}</Td>
                 <Td>{pb.ghichu}</Td>
                 <Td>
-                  <Button size="sm" colorScheme="yellow" onClick={() => { setForm(pb); setEditId(pb.mapb); onOpen() }}>Sửa</Button>
-                  <Button ml={2} size="sm" colorScheme="red" onClick={() => handleDelete(pb.mapb)}>Xóa</Button>
+                  <Button
+                    size="sm"
+                    colorScheme="yellow"
+                    onClick={() => {
+                      setForm(pb)
+                      setEditId(pb.mapb)
+                      onOpen()
+                    }}
+                  >
+                    Sửa
+                  </Button>
+                  <Button ml={2} size="sm" colorScheme="red" onClick={() => handleDelete(pb.mapb)}>
+                    Xóa
+                  </Button>
                 </Td>
               </Tr>
             ))}
@@ -122,8 +149,12 @@ export default function PhongBanPage() {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSave}>Lưu</Button>
-            <Button ml={3} onClick={onClose}>Hủy</Button>
+            <Button colorScheme="blue" onClick={handleSave}>
+              Lưu
+            </Button>
+            <Button ml={3} onClick={onClose}>
+              Hủy
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

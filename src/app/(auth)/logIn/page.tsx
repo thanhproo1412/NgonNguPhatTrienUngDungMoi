@@ -52,7 +52,7 @@ export default function SplitScreen() {
         <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
             <Flex p={8} flex={1} align={'center'} justify={'center'}>
                 <Stack spacing={4} w={'full'} maxW={'md'}>
-                    <Heading fontSize={'2xl'}>Sign in to your account</Heading>
+                    <Heading fontSize={'2xl'}>Đăng nhập</Heading>
                     {error && (
                         <Alert status="error" borderRadius="md">
                             <AlertIcon />
@@ -61,7 +61,7 @@ export default function SplitScreen() {
                     )}
                     <form onSubmit={handleSubmit}>
                         <FormControl id="email" isRequired>
-                            <FormLabel>Email address</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <Input
                                 type="text"
                                 value={email}
@@ -69,7 +69,7 @@ export default function SplitScreen() {
                             />
                         </FormControl>
                         <FormControl id="password" isRequired mt={4}>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Mật khẩu</FormLabel>
                             <Input
                                 type="password"
                                 value={password}
@@ -84,7 +84,7 @@ export default function SplitScreen() {
                             >
                                 <Checkbox>Remember me</Checkbox>
                                 <Text color={'blue.500'} cursor="pointer">
-                                    Forgot password?
+                                    Quên mật khẩu
                                 </Text>
                             </Stack>
                             <Button
@@ -93,7 +93,7 @@ export default function SplitScreen() {
                                 isLoading={loading}
                                 loadingText="Logging in..."
                             >
-                                Log In
+                                Đăng nhập
                             </Button>
                         </Stack>
                     </form>

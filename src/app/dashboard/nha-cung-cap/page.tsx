@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Button, Table, Thead, Tbody, Tr, Th, Td, Stack, Flex, Heading,
   IconButton, Tooltip, useToast, Spinner, Modal, ModalOverlay,
@@ -12,7 +12,7 @@ import {
 import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface Supplier {
-  id?: number; // optional để POST không gửi id
+  id?: number;
   mancc: string;
   tenncc: string;
   diachi?: string;
@@ -32,7 +32,8 @@ export default function SupplierTable() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onClose: onDeleteClose } = useDisclosure();
 
-  const fetchSuppliers = async () => {
+  // ✅ useCallback để tránh cảnh báo và tối ưu hiệu năng
+  const fetchSuppliers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch('/api/nhacungcap');
@@ -44,13 +45,15 @@ export default function SupplierTable() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [toast]);
 
-  useEffect(() => { fetchSuppliers(); }, []);
+  useEffect(() => {
+    fetchSuppliers();
+  }, [fetchSuppliers]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+  };
 
   const handleSave = async () => {
     if (!form.mancc || !form.tenncc) {
@@ -60,7 +63,7 @@ export default function SupplierTable() {
 
     const method = isEditing ? "PUT" : "POST";
     const payload = { ...form };
-    if (!isEditing) delete payload.id; // bỏ id khi thêm mới
+    if (!isEditing) delete payload.id;
 
     try {
       const res = await fetch('/api/nhacungcap', {
@@ -80,7 +83,7 @@ export default function SupplierTable() {
     } catch (err: any) {
       toast({ title: "Lỗi", description: err.message, status: "error" });
     }
-  }
+  };
 
   const handleDelete = async () => {
     if (!deleteId) return;
@@ -95,7 +98,7 @@ export default function SupplierTable() {
       toast({ title: "Lỗi", description: err.message, status: "error" });
     }
     onDeleteClose();
-  }
+  };
 
   return (
     <Stack spacing={5}>
@@ -132,12 +135,23 @@ export default function SupplierTable() {
                 <Td>
                   <Flex justify="center">
                     <Tooltip label="Sửa nhà cung cấp">
-                      <IconButton icon={<FaEdit />} colorScheme="yellow" size="sm" mr={2}
-                        onClick={() => { setForm(s); setIsEditing(true); onOpen(); }} aria-label="Sửa" />
+                      <IconButton
+                        icon={<FaEdit />}
+                        colorScheme="yellow"
+                        size="sm"
+                        mr={2}
+                        onClick={() => { setForm(s); setIsEditing(true); onOpen(); }}
+                        aria-label="Sửa"
+                      />
                     </Tooltip>
                     <Tooltip label="Xóa nhà cung cấp">
-                      <IconButton icon={<FaTrash />} colorScheme="red" size="sm"
-                        onClick={() => { setDeleteId(s.id!); onDeleteOpen(); }} aria-label="Xóa" />
+                      <IconButton
+                        icon={<FaTrash />}
+                        colorScheme="red"
+                        size="sm"
+                        onClick={() => { setDeleteId(s.id!); onDeleteOpen(); }}
+                        aria-label="Xóa"
+                      />
                     </Tooltip>
                   </Flex>
                 </Td>
@@ -171,7 +185,9 @@ export default function SupplierTable() {
             </SimpleGrid>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="teal" mr={3} onClick={handleSave}>{isEditing ? "Cập nhật" : "Thêm"}</Button>
+            <Button colorScheme="teal" mr={3} onClick={handleSave}>
+              {isEditing ? "Cập nhật" : "Thêm"}
+            </Button>
             <Button variant="ghost" onClick={onClose}>Hủy</Button>
           </ModalFooter>
         </ModalContent>
@@ -191,5 +207,5 @@ export default function SupplierTable() {
         </AlertDialogOverlay>
       </AlertDialog>
     </Stack>
-  )
+  );
 }
