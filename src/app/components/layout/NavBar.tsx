@@ -163,11 +163,16 @@ const UserMenu: React.FC<{ user: UserData; handleLogout: () => void }> = ({ user
       </MenuButton>
       <MenuList bg={menuBg} borderColor={menuBorder}>
         {user.role === 'admin' && <MenuItem as="a" href="/dashboard">Dashboard</MenuItem>}
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>Settings</MenuItem>
-        <MenuItem>Billing</MenuItem>
+        <MenuItem>Hồ sơ cá nhân</MenuItem>
+        <MenuItem>Cài đặt</MenuItem>
+        <MenuItem>Trung tâm thông báo</MenuItem>
+        <MenuItem>Lịch sử hoạt động</MenuItem>
+        <MenuItem>Quản lý tài khoản</MenuItem>
+        <MenuItem>Hỗ trợ / Trợ giúp</MenuItem>
+        <MenuItem>Thanh toán</MenuItem>
+        <MenuItem>Ngôn ngữ</MenuItem>
         <MenuDivider />
-        <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+        <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
       </MenuList>
     </Menu>
   )

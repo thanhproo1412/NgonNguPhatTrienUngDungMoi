@@ -1,37 +1,11 @@
 'use client'
 
 import {
-    IconButton,
-    Avatar,
-    Box,
-    CloseButton,
-    Flex,
-    HStack,
-    VStack,
-    Icon,
-    useColorModeValue,
-    Text,
-    Drawer,
-    DrawerContent,
-    useDisclosure,
-    BoxProps,
-    FlexProps,
-    Menu,
-    MenuButton,
-    MenuDivider,
-    MenuItem,
-    MenuList,
+    IconButton, Avatar, Box, CloseButton, Flex, HStack, VStack, Icon, useColorModeValue, Text, Drawer, DrawerContent,
+    useDisclosure, BoxProps, FlexProps, Menu, MenuButton, MenuDivider, MenuItem, MenuList,
 } from '@chakra-ui/react'
-import {
-    FiHome,
-    FiTrendingUp,
-    FiCompass,
-    FiStar,
-    FiSettings,
-    FiMenu,
-    FiBell,
-    FiChevronDown,
-} from 'react-icons/fi'
+import { FiHome, FiTrendingUp, FiCompass, FiStar, FiSettings, FiMenu, FiBell, FiChevronDown, } from 'react-icons/fi'
+import Link from 'next/link'
 import { IconType } from 'react-icons'
 
 
@@ -184,13 +158,20 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                         </MenuButton>
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
-                            borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <MenuItem>Profile</MenuItem>
-                            <MenuItem>Settings</MenuItem>
-                            <MenuItem>Billing</MenuItem>
+                            borderColor={useColorModeValue('gray.200', 'gray.700')}
+                        >
+                            <MenuItem as={Link} href="/dashboard/user/ho-so-ca-nhan">Hồ sơ cá nhân</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/cai-dat">Cài đặt</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/trung-tam-thong-bao">Trung tâm thông báo</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/lich-su-hoat-dong">Lịch sử hoạt động</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/quan-li-tai-khoan">Quản lý tài khoản</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/ho-tro">Hỗ trợ / Trợ giúp</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/thanh-toan">Thanh toán</MenuItem>
+                            <MenuItem as={Link} href="/dashboard/user/ngon-ngu">Ngôn ngữ</MenuItem>
                             <MenuDivider />
-                            <MenuItem>Sign out</MenuItem>
+                            <MenuItem onClick={() => console.log('Đăng xuất')}>Đăng xuất</MenuItem>
                         </MenuList>
+
                     </Menu>
                 </Flex>
             </HStack>
@@ -242,14 +223,14 @@ const NAV_ITEMS: Array<NavItem> = [
         icon: FiHome
     },
     {
-        label: 'Pricing',
+        label: 'Kế hoạch',
         href: '/dashboard/pricing',
         subLabel: 'pricing',
         icon: FiHome
     },
     {
-        label: 'Profile',
-        href: '/dashboard/profile',
+        label: 'Hồ sơ cá nhân',
+        href: '/dashboard/user/ho-so-ca-nhan',
         subLabel: 'profile',
         icon: FiHome
     },
@@ -258,10 +239,6 @@ const NAV_ITEMS: Array<NavItem> = [
         href: '/dashboard/bao-cao',
         subLabel: 'Báo cáo tài chính',
         icon: FiHome
-    },
-    {
-        label: 'AdminPage',
-        href: '/dashboard/adminpage',
     },
     {
         label: 'Quản lí nhân viên',
@@ -286,5 +263,9 @@ const NAV_ITEMS: Array<NavItem> = [
         href: '/dashboard/quan-li-hang-hoa',
         subLabel: 'Quản lí hàng hóa',
         icon: FiHome
+    },
+    {
+        label: 'Xem Thêm',
+        href: '/dashboard/adminpage',
     },
 ];
