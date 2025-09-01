@@ -236,7 +236,7 @@ const NAV_ITEMS: Array<NavItem> = [
     },
     {
         label: 'Báo cáo tài chính',
-        href: '/dashboard/bao-cao',
+        href: '/dashboard/bao-cao-tai-chinh',
         subLabel: 'Báo cáo tài chính',
         icon: FiHome
     },

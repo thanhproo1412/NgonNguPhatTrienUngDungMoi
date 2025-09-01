@@ -38,6 +38,24 @@ const ItemTags = ({ marginTop = 0, tags }: Props) => (
 )
 
 const HomePage = () => {
+    // ✅ Dùng useColorModeValue ở top-level, không trong callback
+    const textColor = useColorModeValue('gray.700', 'gray.300')
+    const textColorSecondary = useColorModeValue('gray.600', 'gray.300')
+    const boxBg = useColorModeValue('white', 'gray.800')
+    const featureBg = useColorModeValue('gray.50', 'gray.700')
+
+    const vatTuList = [
+        { name: "Xi măng PCB40", img: "https://ximangxuanthanh.vn//upload/tin-bai/3-nhan-xi-mang-pooclang-hon-hop-pcb40.png", tags: ["Xây dựng", "Tồn kho: 120 bao"] },
+        { name: "Thép cuộn D10", img: "https://images.unsplash.com/photo-1521207418485-99c705420785?auto=format&fit=crop&w=600&q=80", tags: ["Kết cấu", "Tồn kho: 85 cuộn"] },
+        { name: "Sơn chống thấm", img: "https://www.paintmart.vn/image/catalog/2021/son-chong-tham-co-mau-hay-khong-01.jpg", tags: ["Hoàn thiện", "Tồn kho: 40 thùng"] },
+    ]
+
+    const features = [
+        { icon: FaWarehouse, title: 'Theo dõi tồn kho', desc: 'Cập nhật chính xác số lượng vật tư theo thời gian thực.' },
+        { icon: FaChartLine, title: 'Báo cáo trực quan', desc: 'Tạo báo cáo nhập – xuất, thống kê nhanh chóng, dễ hiểu.' },
+        { icon: FaCheckCircle, title: 'Giảm sai sót', desc: 'Hạn chế nhầm lẫn thủ công, tối ưu quy trình làm việc.' },
+    ]
+
     return (
         <Container maxW={'7xl'} p="12">
             {/* Hero Section */}
@@ -45,7 +63,7 @@ const HomePage = () => {
                 <Heading as="h1" fontSize={{ base: '3xl', md: '5xl' }} color="blue.500">
                     Quản lý vật tư thông minh & hiện đại
                 </Heading>
-                <Text fontSize="lg" color={useColorModeValue('gray.700', 'gray.300')} maxW="2xl">
+                <Text fontSize="lg" color={textColor} maxW="2xl">
                     Tự động hóa quản lý kho, giảm thiểu thất thoát và tối ưu hiệu suất vận hành.
                     Phù hợp cho doanh nghiệp vừa & nhỏ, dễ sử dụng, triển khai nhanh chóng.
                 </Text>
@@ -85,7 +103,7 @@ const HomePage = () => {
                 <VStack align="flex-start" flex="1" spacing={5}>
                     <ItemTags tags={['Kho vật tư', 'Báo cáo tự động', 'Tối ưu chi phí']} />
                     <Heading fontSize="2xl">Quản lý nhập – xuất vật tư hiệu quả</Heading>
-                    <Text fontSize="lg" color={useColorModeValue('gray.700', 'gray.200')}>
+                    <Text fontSize="lg" color={textColor}>
                         Hệ thống hỗ trợ bạn theo dõi tồn kho, nhập xuất và cập nhật dữ liệu vật tư nhanh chóng.
                         Tiết kiệm thời gian, giảm sai sót, tối ưu quy trình quản lý kho của bạn.
                     </Text>
@@ -101,11 +119,7 @@ const HomePage = () => {
             </Heading>
             <Divider my={4} />
             <Wrap spacing="30px" justify="center" mt={5}>
-                {[
-                    { name: "Xi măng PCB40", img: "https://ximangxuanthanh.vn//upload/tin-bai/3-nhan-xi-mang-pooclang-hon-hop-pcb40.png", tags: ["Xây dựng", "Tồn kho: 120 bao"] },
-                    { name: "Thép cuộn D10", img: "https://images.unsplash.com/photo-1521207418485-99c705420785?auto=format&fit=crop&w=600&q=80", tags: ["Kết cấu", "Tồn kho: 85 cuộn"] },
-                    { name: "Sơn chống thấm", img: "https://www.paintmart.vn/image/catalog/2021/son-chong-tham-co-mau-hay-khong-01.jpg", tags: ["Hoàn thiện", "Tồn kho: 40 thùng"] },
-                ].map((item, index) => (
+                {vatTuList.map((item, index) => (
                     <WrapItem key={index} width={{ base: '100%', sm: '45%', md: '30%' }}>
                         <MotionBox
                             whileHover={{ scale: 1.03 }}
@@ -115,7 +129,7 @@ const HomePage = () => {
                             overflow="hidden"
                             boxShadow="md"
                             p={4}
-                            bg={useColorModeValue('white', 'gray.800')}
+                            bg={boxBg} // ✅ Dùng biến thay vì gọi hook trong map
                         >
                             <Image
                                 borderRadius="lg"
@@ -140,15 +154,11 @@ const HomePage = () => {
                     Tại sao nên dùng hệ thống?
                 </Heading>
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-                    {[
-                        { icon: FaWarehouse, title: 'Theo dõi tồn kho', desc: 'Cập nhật chính xác số lượng vật tư theo thời gian thực.' },
-                        { icon: FaChartLine, title: 'Báo cáo trực quan', desc: 'Tạo báo cáo nhập – xuất, thống kê nhanh chóng, dễ hiểu.' },
-                        { icon: FaCheckCircle, title: 'Giảm sai sót', desc: 'Hạn chế nhầm lẫn thủ công, tối ưu quy trình làm việc.' },
-                    ].map((feature, index) => (
-                        <VStack key={index} p={6} borderRadius="2xl" boxShadow="lg" bg={useColorModeValue('gray.50', 'gray.700')}>
+                    {features.map((feature, index) => (
+                        <VStack key={index} p={6} borderRadius="2xl" boxShadow="lg" bg={featureBg}>
                             <Icon as={feature.icon} boxSize={10} color="blue.400" />
                             <Heading fontSize="lg">{feature.title}</Heading>
-                            <Text color={useColorModeValue('gray.600', 'gray.300')} textAlign="center">
+                            <Text color={textColorSecondary} textAlign="center">
                                 {feature.desc}
                             </Text>
                         </VStack>
@@ -159,10 +169,10 @@ const HomePage = () => {
             {/* CTA cuối trang */}
             <VStack mt={20} textAlign="center" spacing={4}>
                 <Heading fontSize="2xl">Bắt đầu ngay hôm nay</Heading>
-                <Text color={useColorModeValue('gray.600', 'gray.300')} maxW="xl">
+                <Text color={textColorSecondary} maxW="xl">
                     Đừng để quản lý vật tư trở thành nỗi đau đầu. Hãy dùng hệ thống để tiết kiệm thời gian & chi phí.
                 </Text>
-                <Button colorScheme="blue" size="lg" rightIcon={<FaArrowRight />} onClick={() => (window.location.href = '/signup')}>
+                <Button colorScheme="blue" size="lg" rightIcon={<FaArrowRight />} onClick={() => (window.location.href = '/signUp')}>
                     Đăng ký sử dụng miễn phí
                 </Button>
             </VStack>
