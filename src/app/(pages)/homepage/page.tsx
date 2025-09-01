@@ -25,7 +25,7 @@ interface Props {
 const ItemTags = ({ marginTop = 0, tags }: Props) => (
     <HStack spacing={2} marginTop={marginTop}>
         {tags.map((tag) => (
-            <Tag size={'md'} variant="solid" colorScheme="green" key={tag}>
+            <Tag size={'md'} variant="solid" colorScheme="blue" key={tag}>
                 {tag}
             </Tag>
         ))}
@@ -36,7 +36,7 @@ const HomePage = () => {
     return (
         <Container maxW={'7xl'} p="12">
             {/* Tiêu đề trang */}
-            <Heading as="h1" textAlign="center" color="green.600">
+            <Heading as="h1" textAlign="center" color="blue.500">
                 Quản lý vật tư thông minh
             </Heading>
 
@@ -67,8 +67,8 @@ const HomePage = () => {
                     <Box zIndex="1" width="100%" position="absolute" height="100%">
                         <Box
                             bgGradient={useColorModeValue(
-                                'radial(green.600 1px, transparent 1px)',
-                                'radial(green.300 1px, transparent 1px)',
+                                'radial(blue.500 1px, transparent 1px)',
+                                'radial(blue.300 1px, transparent 1px)',
                             )}
                             backgroundSize="20px 20px"
                             opacity="0.4"
@@ -98,7 +98,7 @@ const HomePage = () => {
                         Tiết kiệm thời gian, giảm sai sót, tối ưu quy trình quản lý kho của bạn.
                     </Text>
                     <Button
-                        colorScheme="green"
+                        colorScheme="blue"
                         alignSelf="flex-start"
                         mt={4}
                         onClick={() => window.location.href = "/vat-tu"}>
@@ -108,7 +108,7 @@ const HomePage = () => {
             </Box>
 
             {/* Danh sách vật tư mới */}
-            <Heading as="h2" marginTop="10" color="green.700">
+            <Heading as="h2" marginTop="10" color="blue.500">
                 Vật tư mới cập nhật
             </Heading>
             <Divider marginTop="3" />
@@ -139,7 +139,7 @@ const HomePage = () => {
 
             {/* Phần giới thiệu bổ sung */}
             <VStack paddingTop="40px" spacing="2" alignItems="flex-start">
-                <Heading as="h2" color="green.700">Tại sao nên dùng hệ thống?</Heading>
+                <Heading as="h2" color="blue.500">Tại sao nên dùng hệ thống?</Heading>
                 <Text as="p" fontSize="lg">
                     ✔ Quản lý tồn kho chính xác theo thời gian thực  
                     ✔ Hỗ trợ nhập – xuất nhanh chóng, báo cáo tự động  

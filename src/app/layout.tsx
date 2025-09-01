@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 // import './globals.css'
 import { Providers } from './providers'
+import { Box } from '@chakra-ui/react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,9 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
+          <Box minHeight={'1080px'}>
           {children}
-        </Providers>
-      </body>
-    </html>
+        </Box>
+      </Providers>
+    </body>
+    </html >
   )
 }

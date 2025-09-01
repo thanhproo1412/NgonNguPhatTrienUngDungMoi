@@ -295,6 +295,7 @@ const NAV_ITEMS: NavItem[] = [
     children: [
       { label: 'Phiếu xuất', href: '/don-hang/phieu-xuat' },
       { label: 'Chi tiết xuất', href: '/don-hang/chi-tiet-xuat' },
+      { label: 'Hóa đơn', href: '/don-hang/hoa-don' },
       // { label: 'Tạo phiếu xuất mới', href: '/don-hang/tao' },
     ],
   },
