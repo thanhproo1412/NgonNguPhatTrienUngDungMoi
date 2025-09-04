@@ -18,10 +18,26 @@ export default function DashboardLayout({
     useEffect(() => {
         const checkRole = async () => {
             try {
-                // 🟢 Lấy role từ localStorage (hoặc gọi API để verify JWT)
-                const role = localStorage.getItem("role") || "guest";
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    router.replace("/403");
+                    return;
+                }
 
-                if (role === "admin") {
+                const res = await fetch("/api/auth/user", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch user role");
+                }
+
+                const data = await res.json(); // { name, role, avatar }
+                if (data.role === "admin") {
                     setAllowed(true);
                 } else {
                     router.replace("/403");
@@ -45,7 +61,7 @@ export default function DashboardLayout({
         );
     }
 
-    if (!allowed) return null; // Không render dashboard khi chưa đủ quyền
+    if (!allowed) return null;
 
     return (
         <div>
