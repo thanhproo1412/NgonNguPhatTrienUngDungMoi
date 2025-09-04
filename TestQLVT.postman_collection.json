@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "b70bc493-ba14-4768-ab1a-255da3b0da21",
+		"name": "TestQLVT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30492299"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login thành công",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Login is successful\", function () {\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"    pm.expect(jsonData.message).to.include(\"Login successful\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"User object exists\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"user\");\r",
+									"    pm.expect(jsonData.user).to.have.property(\"name\");\r",
+									"    pm.expect(jsonData.user).to.have.property(\"role\");\r",
+									"    pm.expect(jsonData.user).to.have.property(\"avatar\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Role is admin\", function () {\r",
+									"    pm.expect(jsonData.user.role).to.eql(\"admin\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Token exists and is not empty\", function () {\r",
+									"    pm.expect(jsonData.token).to.exist;\r",
+									"    pm.expect(jsonData.token).to.not.eql(\"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "vi-VN,vi;q=0.9,fr-FR;q=0.8,fr;q=0.7,en-US;q=0.6,en;q=0.5,zh-CN;q=0.4,zh;q=0.3"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Origin",
+								"value": "http://localhost:3000"
+							},
+							{
+								"key": "Referer",
+								"value": "http://localhost:3000/logIn"
+							},
+							{
+								"key": "Sec-Fetch-Dest",
+								"value": "empty"
+							},
+							{
+								"key": "Sec-Fetch-Mode",
+								"value": "cors"
+							},
+							{
+								"key": "Sec-Fetch-Site",
+								"value": "same-origin"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Cookie",
+								"value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4xMjNAeW9wbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImF2YXRhciI6Imh0dHBzOi8vaS5waW5pbWcuY29tL29yaWdpbmFscy9kYy85ZC9iYy9kYzlkYmMwN2YzYjA4YWVhNjM4MWNkNWU4ZWIwZGQ1Yi5wbmciLCJpYXQiOjE3NTY5OTI4NDMsImV4cCI6MTc1Njk5NjQ0M30.cZZ6KreKd0Dpk_GDUSJ819PZ9_AcKAM9SyY9-2bNzuI"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\":\"admin\",\"password\":\"admin\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GetProduct",
+			"item": [
+				{
+					"name": "Get danh sách sản phẩm thành công",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Gán các query param động để tái sử dụng\r",
+									"pm.environment.set(\"page\", \"1\");\r",
+									"pm.environment.set(\"limit\", \"20\");\r",
+									"pm.environment.set(\"malh\", \"\"); // để trống => tất cả loại hàng\r",
+									"pm.environment.set(\"minPrice\", \"0\");\r",
+									"pm.environment.set(\"maxPrice\", \"1000000\");\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response có success = true\", function () {\r",
+									"    pm.expect(jsonData.success).to.eql(true);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Products trả về là mảng\", function () {\r",
+									"    pm.expect(jsonData.products).to.be.an(\"array\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Mỗi sản phẩm có đủ field cơ bản\", function () {\r",
+									"    jsonData.products.forEach(product => {\r",
+									"        pm.expect(product).to.have.property(\"mahang\");\r",
+									"        pm.expect(product).to.have.property(\"tenhang\");\r",
+									"        pm.expect(product).to.have.property(\"price\");\r",
+									"        pm.expect(product).to.have.property(\"dvt\");\r",
+									"        pm.expect(product).to.have.property(\"imageURL\");\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Tất cả giá nằm trong khoảng yêu cầu\", function () {\r",
+									"    jsonData.products.forEach(product => {\r",
+									"        pm.expect(product.price).to.be.within(\r",
+									"            parseInt(pm.environment.get(\"minPrice\")),\r",
+									"            parseInt(pm.environment.get(\"maxPrice\"))\r",
+									"        );\r",
+									"    });\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/products?page={{page}}&limit={{limit}}&malh={{malh}}&minPrice={{minPrice}}&maxPrice={{maxPrice}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "{{page}}"
+								},
+								{
+									"key": "limit",
+									"value": "{{limit}}"
+								},
+								{
+									"key": "malh",
+									"value": "{{malh}}"
+								},
+								{
+									"key": "minPrice",
+									"value": "{{minPrice}}"
+								},
+								{
+									"key": "maxPrice",
+									"value": "{{maxPrice}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
