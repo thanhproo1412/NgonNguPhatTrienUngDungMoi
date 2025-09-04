@@ -1,0 +1,14 @@
+| **Loại**                      | **Công nghệ**                                                    | **Mục đích**                                                               |
+| ----------------------------- | ---------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| **Framework**                 | **Next.js (v15)**                                                | Framework React hỗ trợ SSR/SSG, tối ưu SEO và hiệu suất.                   |
+| **Frontend Library**          | **React (v18)**                                                  | Thư viện UI component-based.                                               |
+| **UI Frameworks**             | Chakra UI, Ant Design (antd)                                     | Xây dựng giao diện nhanh với các component sẵn có.                         |
+| **Styling**                   | Tailwind CSS, Emotion (Styled + React)                           | Tùy biến giao diện với utility-first CSS (Tailwind) + CSS-in-JS (Emotion). |
+| **Animation**                 | Framer Motion                                                    | Tạo animation mượt cho component.                                          |
+| **Icons**                     | react-icons, @chakra-ui/icons                                    | Bộ icon sử dụng trong giao diện.                                           |
+| **Charts**                    | @ant-design/charts, @ant-design/plots, chart.js, react-chartjs-2 | Vẽ biểu đồ và dashboard trực quan.                                         |
+| **Calendar**                  | @fullcalendar/react + daygrid, timegrid, interaction             | Hiển thị lịch, event, tương tác drag-drop.                                 |
+| **Authentication & Security** | bcryptjs, jsonwebtoken                                           | Mã hoá mật khẩu (bcrypt) + xác thực bằng JWT.                              |
+| **Database**                  | mssql                                                            | Kết nối và truy vấn cơ sở dữ liệu Microsoft SQL Server.                    |
+| **Development Tools**         | TypeScript, ESLint, PostCSS, Autoprefixer                        | Kiểm tra code, tự động thêm prefix CSS, gõ kiểu an toàn.                   |
+| **Types**                     | @types/\* (node, react, mssql, jsonwebtoken)                     | Hỗ trợ IntelliSense và kiểm tra type trong TypeScript.                     |

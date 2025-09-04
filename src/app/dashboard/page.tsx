@@ -9,6 +9,7 @@ import {
     StatLabel,
     StatNumber,
     useColorModeValue,
+    Spinner,
 } from '@chakra-ui/react'
 import { ReactNode, useState, useEffect } from 'react'
 import { BsPerson } from 'react-icons/bs'
@@ -24,26 +25,33 @@ interface StatsCardProps {
 function StatsCard({ title, stat, icon }: StatsCardProps) {
     return (
         <Stat
-            px={{ base: 2, md: 4 }}
-            py={'5'}
-            shadow={'xl'}
-            border={'1px solid'}
-            borderColor={useColorModeValue('gray.300', 'gray.600')}
-            rounded={'lg'}>
-            <Flex justifyContent={'space-between'}>
-                <Box pl={{ base: 2, md: 4 }}>
-                    <StatLabel fontWeight={'medium'} isTruncated>
+            px={{ base: 4, md: 6 }}
+            py={6}
+            shadow="md"
+            border="1px solid"
+            borderColor={useColorModeValue('gray.200', 'gray.600')}
+            rounded="xl"
+            transition="all 0.2s"
+            _hover={{
+                shadow: 'xl',
+                transform: 'scale(1.03)',
+                borderColor: useColorModeValue('blue.400', 'blue.300'),
+            }}
+        >
+            <Flex justifyContent="space-between">
+                <Box>
+                    <StatLabel fontWeight="medium" fontSize="lg">
                         {title}
                     </StatLabel>
-                    <StatNumber fontSize={'2xl'} fontWeight={'medium'}>
+                    <StatNumber fontSize="3xl" fontWeight="bold">
                         {stat}
                     </StatNumber>
                 </Box>
                 <Box
-                    my={'auto'}
-                    color={useColorModeValue('gray.800', 'gray.200')}
-                    alignContent={'center'}
-                    aria-label={`${title} Icon`}>
+                    my="auto"
+                    color={useColorModeValue('blue.600', 'blue.300')}
+                    aria-label={`${title} Icon`}
+                >
                     {icon}
                 </Box>
             </Flex>
@@ -55,7 +63,7 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        setTimeout(() => setIsLoading(false), 1000) // Simulate loading
+        setTimeout(() => setIsLoading(false), 1000)
     }, [])
 
     const statsData = [
@@ -65,22 +73,27 @@ export default function Dashboard() {
     ]
 
     if (isLoading) {
-        return <Box>Loading...</Box>
+        return (
+            <Flex justify="center" align="center" h="60vh">
+                <Spinner size="xl" color="blue.500" />
+            </Flex>
+        )
     }
 
     return (
-        <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-            <chakra.h1 textAlign={'center'} fontSize={'4xl'} py={10} fontWeight={'bold'}>
+        <Box maxW="7xl" mx="auto" pt={5} px={{ base: 4, sm: 8, md: 12 }}>
+            <chakra.h1
+                textAlign="center"
+                fontSize={{ base: '2xl', md: '4xl' }}
+                py={10}
+                fontWeight="bold"
+                color={useColorModeValue('blue.600', 'blue.300')}
+            >
                 Our company is expanding, you could be too.
             </chakra.h1>
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
+            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
                 {statsData.map((item, idx) => (
-                    <StatsCard
-                        key={idx}
-                        title={item.title}
-                        stat={item.stat}
-                        icon={item.icon}
-                    />
+                    <StatsCard key={idx} {...item} />
                 ))}
             </SimpleGrid>
         </Box>
