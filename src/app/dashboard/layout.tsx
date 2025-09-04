@@ -16,41 +16,42 @@ export default function DashboardLayout({
     const [allowed, setAllowed] = useState(false);
 
     useEffect(() => {
-        const checkRole = async () => {
+        const token = localStorage.getItem("authToken");
+
+        if (!token) {
+            console.warn("No token in localStorage, redirecting...");
+            router.replace("/403");
+            return;
+        }
+
+        const checkAuth = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (!token) {
+                const res = await fetch("/api/auth/user", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || data.error) {
+                    console.warn("Unauthorized, redirecting...");
                     router.replace("/403");
                     return;
                 }
 
-                const res = await fetch("/api/auth/user", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`,
-                    },
-                });
-
-                if (!res.ok) {
-                    throw new Error("Failed to fetch user role");
-                }
-
-                const data = await res.json(); // { name, role, avatar }
                 if (data.role === "admin") {
                     setAllowed(true);
                 } else {
+                    console.warn("Role is not admin, redirecting...");
                     router.replace("/403");
                 }
             } catch (err) {
-                console.error("Role check error:", err);
                 router.replace("/403");
             } finally {
                 setIsChecking(false);
             }
         };
 
-        checkRole();
+        checkAuth();
     }, [router]);
 
     if (isChecking) {
