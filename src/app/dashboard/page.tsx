@@ -23,19 +23,23 @@ interface StatsCardProps {
 }
 
 function StatsCard({ title, stat, icon }: StatsCardProps) {
+    const borderColor = useColorModeValue('gray.200', 'gray.600')
+    const hoverBorderColor = useColorModeValue('blue.400', 'blue.300')
+    const iconColor = useColorModeValue('blue.600', 'blue.300')
+
     return (
         <Stat
             px={{ base: 4, md: 6 }}
             py={6}
             shadow="md"
             border="1px solid"
-            borderColor={useColorModeValue('gray.200', 'gray.600')}
+            borderColor={borderColor}
             rounded="xl"
             transition="all 0.2s"
             _hover={{
                 shadow: 'xl',
                 transform: 'scale(1.03)',
-                borderColor: useColorModeValue('blue.400', 'blue.300'),
+                borderColor: hoverBorderColor,
             }}
         >
             <Flex justifyContent="space-between">
@@ -47,11 +51,7 @@ function StatsCard({ title, stat, icon }: StatsCardProps) {
                         {stat}
                     </StatNumber>
                 </Box>
-                <Box
-                    my="auto"
-                    color={useColorModeValue('blue.600', 'blue.300')}
-                    aria-label={`${title} Icon`}
-                >
+                <Box my="auto" color={iconColor} aria-label={`${title} Icon`}>
                     {icon}
                 </Box>
             </Flex>
@@ -65,6 +65,8 @@ export default function Dashboard() {
     useEffect(() => {
         setTimeout(() => setIsLoading(false), 1000)
     }, [])
+
+    const headingColor = useColorModeValue('blue.600', 'blue.300')
 
     const statsData = [
         { title: 'Users', stat: '5,000', icon: <BsPerson size={'3em'} /> },
@@ -87,7 +89,7 @@ export default function Dashboard() {
                 fontSize={{ base: '2xl', md: '4xl' }}
                 py={10}
                 fontWeight="bold"
-                color={useColorModeValue('blue.600', 'blue.300')}
+                color={headingColor}
             >
                 Our company is expanding, you could be too.
             </chakra.h1>
